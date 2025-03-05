@@ -1,3 +1,10 @@
+// Global values
+let a = "";
+let b = "";
+let result = 0;
+let operator = "";
+let decimalCounter = true;
+
 // The math functions
 const add = function (a, b) {
   return a + b;
@@ -23,12 +30,17 @@ const power = function (a, b) {
   return total;
 };
 
-const factorial = function (a) {
+const factorial = function (num) {
   let total = 1;
-  for (let i = 1; i < a + 1; i++) {
-    total = total * i;
+  if (Number.isInteger(num) && num < 100) {
+    for (let i = 1; i < num + 1; i++) {
+      total = total * i;
+    }
+    return total;
+  } else {
+    alert("Factorial only works with whole numbers or number less than 100.");
+    return "";
   }
-  return total;
 };
 
 // Function to sum the equation
@@ -49,62 +61,109 @@ function operate(operator, a, b) {
 // Display area
 const display = document.querySelector(".display");
 
-// Power the number buttons
-const one = document.querySelector("#one");
-const two = document.querySelector("#two");
-const three = document.querySelector("#three");
-const four = document.querySelector("#four");
-const five = document.querySelector("#five");
-const six = document.querySelector("#six");
-const seven = document.querySelector("#seven");
-const eight = document.querySelector("#eight");
-const nine = document.querySelector("#nine");
-const zero = document.querySelector("#zero");
-const decimal = document.querySelector("#decimal");
-const del = document.querySelector("#delete");
+// Add event listeners to AC, power and factorial
+const misc = document.querySelectorAll(".misc > div");
+misc.forEach((item) => {
+  item.addEventListener("click", function (event) {
+    event.stopPropagation();
+    if (event.target.textContent === "AC") {
+      clearDisplay();
+    } else if (event.target.textContent === "^") {
+      // run power function
+    } else if (event.target.textContent === "!") {
+      setValueA(Number(display.textContent), event.target.textContent);
+    }
+  });
+});
 
-// Add event listeners
+// Add event listeners to the numbers
 const numbers = document.querySelectorAll(".numbers > div");
 numbers.forEach((item) => {
   item.addEventListener("click", function (event) {
     event.stopPropagation();
-    console.log(event.target.textContent);
+    if (event.target.textContent === ".") {
+      if (decimalCounter) {
+        display.innerHTML = display.innerHTML + event.target.textContent;
+        console.log("You pressed " + event.target.textContent);
+        decimalCounter = false;
+      }
+    } else {
+      display.innerHTML = display.innerHTML + event.target.textContent;
+      console.log(event.target.textContent);
+    }
   });
 });
 
-// Power the operators
-const clearOperator = document.querySelector("#ac");
-const powerOperator = document.querySelector("#pow");
-const factorialOperator = document.querySelector("#factorial");
-const divideOperator = document.querySelector("#divide");
-const multiplyOperator = document.querySelector("#multiply");
-const subtractOperator = document.querySelector("#subtract");
-const additionOperator = document.querySelector("#addition");
-const equalsOperator = document.querySelector("#equals");
-
-// Add event listeners
+// Add event listeners to the operators
 const operators = document.querySelectorAll(".operators > div");
 operators.forEach((item) => {
   item.addEventListener("click", function (event) {
     event.stopPropagation();
+    if (event.target.textContent === "=") {
+      b = Number(display.textContent); // set "b" value on equals
+    } else {
+      a = Number(display.textContent); // set "a" value
+    }
+    operator = event.key;
     console.log(event.target.textContent);
   });
 });
 
-// Add keydown listener to display div
+// Add keydown listener to document
 
 document.addEventListener("keypress", function onPress(event) {
   if (event.key >= "0" && event.key <= "9") {
+    display.innerHTML = display.innerHTML + event.key;
     console.log("You pressed " + event.key);
+  } else if (event.key === ".") {
+    // Prevent decimal from being pressed twice
+    if (decimalCounter) {
+      display.innerHTML = display.innerHTML + event.key;
+      console.log("You pressed " + event.key);
+      decimalCounter = false;
+    }
   } else if (
     event.key === "/" ||
     event.key === "x" ||
+    event.key === "–" ||
     event.key === "+" ||
-    event.key === "=" ||
     event.key === "!" ||
     event.key === "^"
   ) {
-    // store operator
+    setValueA(Number(display.textContent), event.key);
+    console.log("You pressed an operator " + event.key);
+  } else if (event.key === "=") {
+    b = Number(display.textContent); // set "b" value on equals
     console.log("You pressed an operator " + event.key);
   }
+  operator = event.key;
 });
+
+function setValueA(num, operation) {
+  switch (operation) {
+    case "/":
+    //something
+    case "x":
+    //something
+    case "–":
+    //something
+    case "+":
+    //something
+    case "!":
+      a = num;
+      displayResult(factorial(num));
+    case "^":
+    //something
+  }
+}
+
+function displayResult(result) {
+  clearDisplay();
+  display.innerHTML = result;
+  decimalCounter = true;
+}
+
+function clearDisplay() {
+  display.innerHTML = "";
+  decimalCounter = true;
+}

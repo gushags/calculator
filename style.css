@@ -79,6 +79,11 @@ h6 {
   height: 90px;
   border: 4px solid black;
 }
+.left {
+  display: flex;
+  flex-direction: column;
+}
+.misc,
 .numbers {
   background-color: beige;
   flex: 3;
@@ -87,9 +92,15 @@ h6 {
   flex-wrap: wrap;
   justify-content: center;
   align-content: space-between;
-  border-bottom: 4px solid black;
   border-left: 4px solid black;
 }
+.misc > div {
+  text-align: center;
+}
+.numbers {
+  border-bottom: 4px solid black;
+}
+
 .numbers > div {
   background-color: rgb(136, 187, 212, 25%);
   width: 90px;
@@ -113,6 +124,10 @@ h6 {
   align-content: space-evenly;
   border-bottom: 4px solid black;
   border-right: 4px solid black;
+  padding-right: 8px;
+}
+.right {
+  display: flex;
 }
 
 #ac,
