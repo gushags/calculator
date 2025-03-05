@@ -96,7 +96,6 @@ numbers.forEach((item) => {
     if (event.target.textContent === ".") {
       if (decimalCounter) {
         display.innerHTML = display.innerHTML + event.target.textContent;
-
         decimalCounter = false;
       }
     } else {
@@ -114,6 +113,7 @@ operators.forEach((item) => {
       b = Number(display.textContent); // set "b" value on equals
       operate(operator, a, b);
     } else {
+      console.log(event.target.textContent);
       setValueA(Number(display.textContent), event.target.textContent);
     }
   });
@@ -158,14 +158,10 @@ function setValueA(num, operation) {
   }
   // Check to see if "a" has already been set
   // the the next operator triggers the equals
-  if (a != "") {
-    operate(operation, a, num);
-    result = a;
-  } else {
-    a = num;
-    operator = operation;
-    clearDisplay();
-  }
+
+  a = num;
+  operator = operation;
+  clearDisplay();
 }
 
 function displayResult(result) {
