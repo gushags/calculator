@@ -79,6 +79,7 @@ misc.forEach((item) => {
     event.stopPropagation();
     if (event.target.textContent === "AC") {
       clearDisplay();
+      a = "";
     } else if (event.target.textContent === "^") {
       // run power function
     } else if (event.target.textContent === "!") {
@@ -95,12 +96,11 @@ numbers.forEach((item) => {
     if (event.target.textContent === ".") {
       if (decimalCounter) {
         display.innerHTML = display.innerHTML + event.target.textContent;
-        console.log("You pressed " + event.target.textContent);
+
         decimalCounter = false;
       }
     } else {
       display.innerHTML = display.innerHTML + event.target.textContent;
-      console.log(event.target.textContent);
     }
   });
 });
@@ -114,10 +114,8 @@ operators.forEach((item) => {
       b = Number(display.textContent); // set "b" value on equals
       operate(operator, a, b);
     } else {
-      a = Number(display.textContent); // set "a" value
+      setValueA(Number(display.textContent), event.target.textContent);
     }
-    operator = event.key;
-    console.log(event.target.textContent);
   });
 });
 
@@ -125,12 +123,11 @@ operators.forEach((item) => {
 document.addEventListener("keypress", function onPress(event) {
   if (event.key >= "0" && event.key <= "9") {
     display.innerHTML = display.innerHTML + event.key;
-    console.log("You pressed " + event.key);
   } else if (event.key === ".") {
     // Prevent decimal from being pressed twice
     if (decimalCounter) {
       display.innerHTML = display.innerHTML + event.key;
-      console.log("You pressed " + event.key);
+
       decimalCounter = false;
     }
   } else if (
@@ -143,12 +140,9 @@ document.addEventListener("keypress", function onPress(event) {
     event.key === "^"
   ) {
     setValueA(Number(display.textContent), event.key);
-    console.log("You pressed an operator " + event.key);
   } else if (event.key === "=") {
     b = Number(display.textContent); // set "b" value on equals
-    console.log(a + " " + operator + " " + b);
     operate(operator, a, b);
-    console.log("You pressed an operator " + event.key);
   }
 });
 
@@ -162,9 +156,16 @@ function setValueA(num, operation) {
       //something
       break;
   }
-  a = num;
-  operator = operation;
-  clearDisplay();
+  // Check to see if "a" has already been set
+  // the the next operator triggers the equals
+  if (a != "") {
+    operate(operation, a, num);
+    result = a;
+  } else {
+    a = num;
+    operator = operation;
+    clearDisplay();
+  }
 }
 
 function displayResult(result) {
