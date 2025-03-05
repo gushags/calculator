@@ -3,27 +3,32 @@ let a = "";
 let b = "";
 let result = 0;
 let operator = "";
+let operatorCounter = 0;
 let decimalCounter = true;
 
 // The math functions
 const add = function (a, b) {
   result = a + b;
   displayResult(result);
+  operatorCounter++;
 };
 
 const subtract = function (a, b) {
   result = a - b;
   displayResult(result);
+  operatorCounter++;
 };
 
 const multiply = function (a, b) {
   result = a * b;
   displayResult(result);
+  operatorCounter++;
 };
 
 const divide = function (a, b) {
   result = a / b;
   displayResult(result);
+  operatorCounter++;
 };
 
 const power = function (a, b) {
@@ -49,7 +54,6 @@ const factorial = function (num) {
 
 // Function to sum the equation
 function operate(operator, a, b) {
-  // something here
   switch (operator) {
     case "+":
       add(a, b);
@@ -112,8 +116,8 @@ operators.forEach((item) => {
     if (event.target.textContent === "=") {
       b = Number(display.textContent); // set "b" value on equals
       operate(operator, a, b);
-    } else {
-      console.log(event.target.textContent);
+      operatorCounter = 0;
+    } else if (!operatorCounter) {
       setValueA(Number(display.textContent), event.target.textContent);
     }
   });
@@ -127,7 +131,6 @@ document.addEventListener("keypress", function onPress(event) {
     // Prevent decimal from being pressed twice
     if (decimalCounter) {
       display.innerHTML = display.innerHTML + event.key;
-
       decimalCounter = false;
     }
   } else if (
@@ -139,10 +142,19 @@ document.addEventListener("keypress", function onPress(event) {
     event.key === "!" ||
     event.key === "^"
   ) {
-    setValueA(Number(display.textContent), event.key);
+    console.log(operatorCounter);
+    if (!operatorCounter) {
+      setValueA(Number(display.textContent), event.key);
+    } else {
+      b = Number(display.textContent); // set "b" value on equals
+      clearDisplay();
+      operate(operator, a, b);
+      a = result;
+    }
   } else if (event.key === "=") {
     b = Number(display.textContent); // set "b" value on equals
     operate(operator, a, b);
+    operatorCounter = 0;
   }
 });
 
@@ -156,12 +168,14 @@ function setValueA(num, operation) {
       //something
       break;
   }
-  // Check to see if "a" has already been set
-  // the the next operator triggers the equals
-
-  a = num;
-  operator = operation;
-  clearDisplay();
+  if (!operatorCounter) {
+    a = num;
+    operator = operation;
+    operatorCounter++;
+    clearDisplay();
+  } else if (operatorCounter) {
+    operate(operation, a, num);
+  }
 }
 
 function displayResult(result) {
