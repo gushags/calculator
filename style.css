@@ -62,20 +62,44 @@ h6 {
 }
 
 /* Modify CSS below here */
+.buttons {
+  display: flex;
+  flex-direction: row;
+}
 .container {
   background-color: brown;
   display: flex;
-  width: 800px;
+  flex-direction: column;
+  width: 400px;
   margin: 50px auto;
 }
 .display {
   background-color: coral;
-  height: 30px;
-  width: 100px;
+  height: 60px;
 }
 .numbers {
   background-color: beige;
+  flex: 3;
+  gap: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+.numbers > div {
+  width: 98px;
+  height: 100px;
+  border: 2px solid black;
+  text-align: center;
+}
+
 .operators {
   background-color: cadetblue;
+  flex: 1;
+  gap: 2px;
+}
+
+.operators > div {
+  width: 100px;
+  height: 80px;
+  border: 2px solid black;
 }
