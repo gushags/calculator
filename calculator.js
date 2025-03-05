@@ -7,19 +7,23 @@ let decimalCounter = true;
 
 // The math functions
 const add = function (a, b) {
-  return a + b;
+  result = a + b;
+  displayResult(result);
 };
 
 const subtract = function (a, b) {
-  return a - b;
+  result = a - b;
+  displayResult(result);
 };
 
 const multiply = function (a, b) {
-  return a * b;
+  result = a * b;
+  displayResult(result);
 };
 
 const divide = function (a, b) {
-  return a / b;
+  result = a / b;
+  displayResult(result);
 };
 
 const power = function (a, b) {
@@ -48,13 +52,20 @@ function operate(operator, a, b) {
   // something here
   switch (operator) {
     case "+":
-      return add(a, b);
+      add(a, b);
+      break;
     case "-":
-      return subtract(a, b);
+      subtract(a, b);
+      break;
+    case "x":
+      multiply(a, b);
+      break;
     case "*":
-      return multiply(a, b);
+      multiply(a, b);
+      break;
     case "/":
-      return divide(a, b);
+      divide(a, b);
+      break;
   }
 }
 
@@ -76,7 +87,7 @@ misc.forEach((item) => {
   });
 });
 
-// Add event listeners to the numbers
+// Add click event listeners to the numbers
 const numbers = document.querySelectorAll(".numbers > div");
 numbers.forEach((item) => {
   item.addEventListener("click", function (event) {
@@ -94,13 +105,14 @@ numbers.forEach((item) => {
   });
 });
 
-// Add event listeners to the operators
+// Add click event listeners to the operators
 const operators = document.querySelectorAll(".operators > div");
 operators.forEach((item) => {
   item.addEventListener("click", function (event) {
     event.stopPropagation();
     if (event.target.textContent === "=") {
       b = Number(display.textContent); // set "b" value on equals
+      operate(operator, a, b);
     } else {
       a = Number(display.textContent); // set "a" value
     }
@@ -109,8 +121,7 @@ operators.forEach((item) => {
   });
 });
 
-// Add keydown listener to document
-
+// Add keypress listener to document
 document.addEventListener("keypress", function onPress(event) {
   if (event.key >= "0" && event.key <= "9") {
     display.innerHTML = display.innerHTML + event.key;
@@ -125,7 +136,8 @@ document.addEventListener("keypress", function onPress(event) {
   } else if (
     event.key === "/" ||
     event.key === "x" ||
-    event.key === "–" ||
+    event.key === "*" ||
+    event.key === "-" ||
     event.key === "+" ||
     event.key === "!" ||
     event.key === "^"
@@ -134,27 +146,25 @@ document.addEventListener("keypress", function onPress(event) {
     console.log("You pressed an operator " + event.key);
   } else if (event.key === "=") {
     b = Number(display.textContent); // set "b" value on equals
+    console.log(a + " " + operator + " " + b);
+    operate(operator, a, b);
     console.log("You pressed an operator " + event.key);
   }
-  operator = event.key;
 });
 
 function setValueA(num, operation) {
   switch (operation) {
-    case "/":
-    //something
-    case "x":
-    //something
-    case "–":
-    //something
-    case "+":
-    //something
     case "!":
       a = num;
       displayResult(factorial(num));
+      break;
     case "^":
-    //something
+      //something
+      break;
   }
+  a = num;
+  operator = operation;
+  clearDisplay();
 }
 
 function displayResult(result) {
