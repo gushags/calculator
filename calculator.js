@@ -1,80 +1,136 @@
-// The math functions
-const add = function (a, b) {
-  result = a + b;
-};
-
-const subtract = function (a, b) {
-  result = a - b;
-};
-
-const multiply = function (a, b) {
-  result = a * b;
-};
-
-const divide = function (a, b) {
-  result = a / b;
-};
-
-// Function to sum the equation
-function operate(operator, a, b) {
-  switch (operator) {
-    case "+":
-      add(a, b);
-      break;
-    case "-":
-      subtract(a, b);
-      break;
-    case "x":
-      multiply(a, b);
-      break;
-    case "/":
-      divide(a, b);
-      break;
-  }
-}
-
+// Global variables
 let firstNum = null;
 let secondNum = null;
-let operator = "";
-let result;
-let displayContent = [0];
+let operator1 = null;
+let operator2 = null;
+let result = null;
+let displayContent = "0";
 const operators = ["+", "-", "/", "x"];
 const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
-// Display area
-const display = document.querySelector(".display");
-display.textContent = displayContent;
+// Function to evaluate the equation
+function operate(operator, a, b) {
+  switch (operator) {
+    case "+":
+      return a + b;
+    case "-":
+      return a - b;
+    case "x":
+      return a * b;
+    case "/":
+      if (b === 0) {
+        return "Oh no no no no no!";
+      } else {
+        return a / b;
+      }
+  }
+}
+
+function updateDisplay() {
+  const display = document.querySelector(".display");
+  display.innerText = displayContent;
+}
+
+updateDisplay();
 
 // Add click event listeners to the button
 const buttons = document.querySelectorAll(".buttons > div");
 buttons.forEach((button) => {
   button.addEventListener("click", function (event) {
-    let select = event.target.textContent;
+    let selection = event.target.textContent;
     event.stopPropagation();
-    if (select === ".") {
-      if (!displayContent.includes(".")) {
-        display.textContent = displayContent.push(select);
-      }
-    } else if (numbers.includes(select)) {
-      if (displayContent[0] == 0) {
-        displayContent = [];
-        firstNum = displayContent.push(select);
-        display.textContent = displayContent;
-      } else {
-        displayContent.push(select);
-        firstNum = displayContent.join("");
-        display.textContent = firstNum;
-      }
-    } else if (operators.includes(select) && secondNum === null) {
-      operator = select;
-    } else if (operators.includes(select) && secondNum != null) {
-      operate(operator, Number(firstNum), Number(secondNum));
-      operator = select;
-    } else if (select === "=" && secondNum != null) {
-      operate(operator, Number(firstNum), Number(secondNum));
+    if (selection === ".") {
+      decimalInput(selection);
+      updateDisplay();
+    } else if (numbers.includes(selection)) {
+      operandsInput(selection);
+      updateDisplay();
+    } else if (operators.includes(selection)) {
+      operatorsInput(selection);
+      updateDisplay();
+    } else if (selection === "=") {
+      equalsInput();
+      updateDisplay();
+    } else if (selection === "c") {
+      clearInput();
+      updateDisplay();
     }
   });
 });
+
+function decimalInput(decimal) {
+  if (displayContent === firstNum || displayContent === secondNum) {
+    displayContent = "0";
+    displayContent += decimal;
+  } else if (!displayContent.includes(decimal)) {
+    displayContent += decimal;
+  }
+}
+
+function operandsInput(num) {
+  if (firstNum === null) {
+    if (displayContent === "0") {
+      displayContent = "";
+      displayContent += num;
+    } else {
+      displayContent += num;
+    }
+    // 1st click after operator
+  } else if (firstNum === displayContent) {
+    displayContent = "";
+    displayContent += num;
+    // 2nd click and beyond after operator
+  } else {
+    displayContent += num;
+  }
+}
+
+function operatorsInput(operator) {
+  if (operator1 === null) {
+    operator1 = operator;
+    firstNum = displayContent;
+  } else {
+    if (operator2 === null) {
+      operator2 = operator;
+    } else {
+      operator1 = operator2;
+      operator2 = operator;
+    }
+  }
+}
+
+function equalsInput() {
+  secondNum = displayContent;
+  console.log(secondNum);
+  result = operate(operator1, Number(firstNum), Number(secondNum));
+  console.log(result);
+  displayContent = result;
+}
+
+function clearInput() {
+  firstNum = null;
+  secondNum = null;
+  operator1 = null;
+  operator2 = null;
+  displayContent = "0";
+}
+
+// WHEN a number is clicked
+// capture the number
+// and put it in the display
+// IF a second number is clicked
+// capture it and put it in the display
+// WHEN an operator is finally clicked
+// capture the operator and then
+// set the firstValue equal to the display value
+// WHEN the next number is clicked
+// Clear the display
+// capture the number and put it in the display
+// Continue
+// WHEN the = sign is clicked
+// set the secondValue equal to the display value
+// RUN the operator on the two values
+// and RETURN the result to the display
 
 // // Add keypress listener to document
 // document.addEventListener("keypress", function onPress(event) {
