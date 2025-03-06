@@ -19,7 +19,7 @@ function operate(operator, a, b) {
       return a * b;
     case "/":
       if (b === 0) {
-        return "Oh no no no no no!";
+        return "Oh c'mon!";
       } else {
         return a / b;
       }
@@ -54,7 +54,7 @@ buttons.forEach((button) => {
     } else if (selection === "DEL") {
       delInput();
       updateDisplay();
-    } else if (selection === "c") {
+    } else if (selection === "C") {
       clearInput();
       updateDisplay();
     }
@@ -116,10 +116,10 @@ function equalsInput() {
     secondNum = displayContent;
     result = operate(operator1, Number(firstNum), Number(secondNum));
     displayContent = result;
+    operator1 = null;
+    operator2 = null;
+    firstNum = displayContent;
   }
-  operator1 = null;
-  operator2 = null;
-  firstNum = displayContent;
 }
 
 function delInput() {
@@ -137,23 +137,6 @@ function clearInput() {
   operator2 = null;
   displayContent = "0";
 }
-
-// WHEN a number is clicked
-// capture the number
-// and put it in the display
-// IF a second number is clicked
-// capture it and put it in the display
-// WHEN an operator is finally clicked
-// capture the operator and then
-// set the firstValue equal to the display value
-// WHEN the next number is clicked
-// Clear the display
-// capture the number and put it in the display
-// Continue
-// WHEN the = sign is clicked
-// set the secondValue equal to the display value
-// RUN the operator on the two values
-// and RETURN the result to the display
 
 // // Add keypress listener to document
 // document.addEventListener("keypress", function onPress(event) {

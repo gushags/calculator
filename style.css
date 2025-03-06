@@ -63,11 +63,17 @@ h6 {
 }
 
 /* Modify CSS below here */
+
+.share-tech-mono-regular {
+  font-family: "Share Tech Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .buttons {
   display: flex;
   flex-direction: row;
   background-color: beige;
-  flex: 3;
   gap: 5px;
   display: flex;
   flex-wrap: wrap;
@@ -76,36 +82,7 @@ h6 {
   border-left: 4px solid black;
   border-right: 4px solid black;
   border-bottom: 4px solid black;
-}
-.container {
-  background-color: brown;
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  margin: 50px auto;
-}
-.display {
-  background-color: whitesmoke;
-  height: 90px;
-  border: 4px solid black;
-}
-
-.misc,
-.numbers {
-  background-color: beige;
-  flex: 3;
-  gap: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: space-between;
-  border-left: 4px solid black;
-}
-.misc > div {
-  text-align: center;
-}
-.numbers {
-  border-bottom: 4px solid black;
+  padding: 10px 0;
 }
 
 .buttons > div {
@@ -113,46 +90,48 @@ h6 {
   width: 90px;
   height: 90px;
   border: 2px solid black;
-  border-radius: 50%;
+  border-radius: 10%;
   text-align: center;
   font-size: 2.5rem;
   padding-top: 14px;
-  margin: 5px 0;
 }
 
-.operators {
-  background-color: beige;
-  flex: 1;
+.container {
+  background-color: brown;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  align-items: center;
-  align-content: space-evenly;
-  border-bottom: 4px solid black;
-  border-right: 4px solid black;
-  padding-right: 8px;
-}
-.right {
-  display: flex;
+  width: 400px;
+  margin: 50px auto;
 }
 
-#ac,
-#pow,
-#factorial,
-.operators > div {
-  background-color: rgb(136, 187, 212, 75%);
-  width: 80px;
-  height: 80px;
-  border: 2px solid black;
-  border-radius: 35%;
-  font-size: 2.5rem;
-  margin: 5px 0;
-  padding-top: 5px;
+.display {
+  background-color: whitesmoke;
+  height: 90px;
+  border: 4px solid black;
+  font-size: 3.5rem;
+  text-align: end;
+  padding-right: 10px;
 }
 
-#ac,
-#pow,
-#factorial {
-  margin: 5px 6px;
+#equals {
+  flex: 2;
+  border-radius: 8%;
+  margin-right: 8px;
+  background-color: rgba(77, 233, 82, 50%);
+}
+
+#delete {
+  margin-left: 8px;
+  background-color: rgba(222, 108, 184, 50%);
+}
+
+#clear {
+  background-color: rgba(222, 108, 184, 50%);
+}
+
+#divide,
+#multiply,
+#add,
+#subtract {
+  background-color: rgb(136, 187, 212, 70%);
 }
