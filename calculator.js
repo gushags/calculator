@@ -57,6 +57,9 @@ buttons.forEach((button) => {
     } else if (selection === "C") {
       clearInput();
       updateDisplay();
+    } else if (selection === "+/-") {
+      negativePositive();
+      updateDisplay();
     }
   });
 });
@@ -107,6 +110,14 @@ function operatorsInput(operator) {
       operator1 = operator2;
       operator2 = operator;
     }
+  }
+}
+
+function negativePositive() {
+  if (displayContent != "0") {
+    let temp = Number(displayContent * -1);
+    console.log(temp);
+    displayContent = temp.toString();
   }
 }
 
