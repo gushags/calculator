@@ -1,55 +1,18 @@
-// Global values
-let a = "";
-let b = "";
-let result = 0;
-let operator = "";
-let operatorCounter = 0;
-let decimalCounter = true;
-
 // The math functions
 const add = function (a, b) {
   result = a + b;
-  displayResult(result);
-  operatorCounter++;
 };
 
 const subtract = function (a, b) {
   result = a - b;
-  displayResult(result);
-  operatorCounter++;
 };
 
 const multiply = function (a, b) {
   result = a * b;
-  displayResult(result);
-  operatorCounter++;
 };
 
 const divide = function (a, b) {
   result = a / b;
-  displayResult(result);
-  operatorCounter++;
-};
-
-const power = function (a, b) {
-  let total = 1;
-  for (let i = 0; i < b; i++) {
-    total = total * a;
-  }
-  return total;
-};
-
-const factorial = function (num) {
-  let total = 1;
-  if (Number.isInteger(num) && num < 100) {
-    for (let i = 1; i < num + 1; i++) {
-      total = total * i;
-    }
-    return total;
-  } else {
-    alert("Factorial only works with whole numbers or number less than 100.");
-    return "";
-  }
 };
 
 // Function to sum the equation
@@ -64,127 +27,86 @@ function operate(operator, a, b) {
     case "x":
       multiply(a, b);
       break;
-    case "*":
-      multiply(a, b);
-      break;
     case "/":
       divide(a, b);
       break;
   }
 }
 
+let firstNum = null;
+let secondNum = null;
+let operator = "";
+let result;
+let displayContent = [0];
+const operators = ["+", "-", "/", "x"];
+const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+
 // Display area
 const display = document.querySelector(".display");
+display.textContent = displayContent;
 
-// Add event listeners to AC, power and factorial
-const misc = document.querySelectorAll(".misc > div");
-misc.forEach((item) => {
-  item.addEventListener("click", function (event) {
+// Add click event listeners to the button
+const buttons = document.querySelectorAll(".buttons > div");
+buttons.forEach((button) => {
+  button.addEventListener("click", function (event) {
+    let select = event.target.textContent;
     event.stopPropagation();
-    if (event.target.textContent === "AC") {
-      clearDisplay();
-      a = "";
-    } else if (event.target.textContent === "^") {
-      // run power function
-    } else if (event.target.textContent === "!") {
-      setValueA(Number(display.textContent), event.target.textContent);
-    }
-  });
-});
-
-// Add click event listeners to the numbers
-const numbers = document.querySelectorAll(".numbers > div");
-numbers.forEach((item) => {
-  item.addEventListener("click", function (event) {
-    event.stopPropagation();
-    if (event.target.textContent === ".") {
-      if (decimalCounter) {
-        display.innerHTML = display.innerHTML + event.target.textContent;
-        decimalCounter = false;
+    if (select === ".") {
+      if (!displayContent.includes(".")) {
+        display.textContent = displayContent.push(select);
       }
-    } else {
-      display.innerHTML = display.innerHTML + event.target.textContent;
+    } else if (numbers.includes(select)) {
+      if (displayContent[0] == 0) {
+        displayContent = [];
+        firstNum = displayContent.push(select);
+        display.textContent = displayContent;
+      } else {
+        displayContent.push(select);
+        firstNum = displayContent.join("");
+        display.textContent = firstNum;
+      }
+    } else if (operators.includes(select) && secondNum === null) {
+      operator = select;
+    } else if (operators.includes(select) && secondNum != null) {
+      operate(operator, Number(firstNum), Number(secondNum));
+      operator = select;
+    } else if (select === "=" && secondNum != null) {
+      operate(operator, Number(firstNum), Number(secondNum));
     }
   });
 });
 
-// Add click event listeners to the operators
-const operators = document.querySelectorAll(".operators > div");
-operators.forEach((item) => {
-  item.addEventListener("click", function (event) {
-    event.stopPropagation();
-    if (event.target.textContent === "=") {
-      b = Number(display.textContent); // set "b" value on equals
-      operate(operator, a, b);
-      operatorCounter = 0;
-    } else if (!operatorCounter) {
-      setValueA(Number(display.textContent), event.target.textContent);
-    }
-  });
-});
-
-// Add keypress listener to document
-document.addEventListener("keypress", function onPress(event) {
-  if (event.key >= "0" && event.key <= "9") {
-    display.innerHTML = display.innerHTML + event.key;
-  } else if (event.key === ".") {
-    // Prevent decimal from being pressed twice
-    if (decimalCounter) {
-      display.innerHTML = display.innerHTML + event.key;
-      decimalCounter = false;
-    }
-  } else if (
-    event.key === "/" ||
-    event.key === "x" ||
-    event.key === "*" ||
-    event.key === "-" ||
-    event.key === "+" ||
-    event.key === "!" ||
-    event.key === "^"
-  ) {
-    console.log(operatorCounter);
-    if (!operatorCounter) {
-      setValueA(Number(display.textContent), event.key);
-    } else {
-      b = Number(display.textContent); // set "b" value on equals
-      clearDisplay();
-      operate(operator, a, b);
-      a = result;
-    }
-  } else if (event.key === "=") {
-    b = Number(display.textContent); // set "b" value on equals
-    operate(operator, a, b);
-    operatorCounter = 0;
-  }
-});
-
-function setValueA(num, operation) {
-  switch (operation) {
-    case "!":
-      a = num;
-      displayResult(factorial(num));
-      break;
-    case "^":
-      //something
-      break;
-  }
-  if (!operatorCounter) {
-    a = num;
-    operator = operation;
-    operatorCounter++;
-    clearDisplay();
-  } else if (operatorCounter) {
-    operate(operation, a, num);
-  }
-}
-
-function displayResult(result) {
-  clearDisplay();
-  display.innerHTML = result;
-  decimalCounter = true;
-}
-
-function clearDisplay() {
-  display.innerHTML = "";
-  decimalCounter = true;
-}
+// // Add keypress listener to document
+// document.addEventListener("keypress", function onPress(event) {
+//   if (event.key >= "0" && event.key <= "9") {
+//     display.innerHTML = display.innerHTML + event.key;
+//   } else if (event.key === ".") {
+//     // Prevent decimal from being pressed twice
+//     if (decimalCounter) {
+//       display.innerHTML = display.innerHTML + event.key;
+//       decimalCounter = false;
+//     }
+//   } else if (
+//     event.key === "/" ||
+//     event.key === "x" ||
+//     event.key === "*" ||
+//     event.key === "-" ||
+//     event.key === "+" ||
+//     event.key === "!" ||
+//     event.key === "^"
+//   ) {
+//     console.log(operatorCounter);
+//     if (!operatorCounter) {
+//       setValueA(Number(display.textContent), event.key);
+//     } else {
+//       b = Number(display.textContent); // set "b" value on equals
+//       clearDisplay();
+//       operate(operator, a, b);
+//       a = result;
+//     }
+//   } else if (event.key === "=") {
+//     b = Number(display.textContent); // set "b" value on equals
+//     operate(operator, a, b);
+//     operatorCounter = 0;
+//   }
+// });
