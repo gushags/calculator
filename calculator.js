@@ -51,6 +51,9 @@ buttons.forEach((button) => {
     } else if (selection === "=") {
       equalsInput();
       updateDisplay();
+    } else if (selection === "DEL") {
+      delInput();
+      updateDisplay();
     } else if (selection === "c") {
       clearInput();
       updateDisplay();
@@ -68,20 +71,20 @@ function decimalInput(decimal) {
 }
 
 function operandsInput(num) {
-  if (firstNum === null) {
+  if (operator1 === null) {
     if (displayContent === "0") {
-      displayContent = "";
-      displayContent += num;
+      displayContent = num;
+    } else if (firstNum === displayContent) {
+      displayContent = num;
     } else {
       displayContent += num;
     }
-    // 1st click after operator
-  } else if (firstNum === displayContent) {
-    displayContent = "";
-    displayContent += num;
-    // 2nd click and beyond after operator
   } else {
-    displayContent += num;
+    if (displayContent === firstNum) {
+      displayContent = num;
+    } else {
+      displayContent += num;
+    }
   }
 }
 
@@ -91,8 +94,16 @@ function operatorsInput(operator) {
     firstNum = displayContent;
   } else {
     if (operator2 === null) {
+      secondNum = displayContent;
+      result = operate(operator1, Number(firstNum), Number(secondNum));
+      displayContent = result;
+      firstNum = result;
       operator2 = operator;
     } else {
+      secondNum = displayContent;
+      result = operate(operator1, Number(firstNum), Number(secondNum));
+      displayContent = result;
+      firstNum = result;
       operator1 = operator2;
       operator2 = operator;
     }
@@ -100,11 +111,23 @@ function operatorsInput(operator) {
 }
 
 function equalsInput() {
-  secondNum = displayContent;
-  console.log(secondNum);
-  result = operate(operator1, Number(firstNum), Number(secondNum));
-  console.log(result);
-  displayContent = result;
+  // Prevent undefined by clicking = too early
+  if (operator1) {
+    secondNum = displayContent;
+    result = operate(operator1, Number(firstNum), Number(secondNum));
+    displayContent = result;
+  }
+  operator1 = null;
+  operator2 = null;
+  firstNum = displayContent;
+}
+
+function delInput() {
+  if (displayContent.length === 1) {
+    displayContent = "0";
+  } else {
+    displayContent = displayContent.slice(0, displayContent.length - 1);
+  }
 }
 
 function clearInput() {
