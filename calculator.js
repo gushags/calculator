@@ -100,9 +100,9 @@ function decimalInput(decimal) {
 
 function operandsInput(num) {
   if (operator1 === null) {
-    if (displayContent === "0") {
+    if (displayContent === "0" || displayContent === 0) {
       displayContent = num;
-    } else if (firstNum === displayContent) {
+    } else if (displayContent === firstNum) {
       displayContent = num;
     } else {
       displayContent += num;
@@ -117,24 +117,61 @@ function operandsInput(num) {
 }
 
 function operatorsInput(operator) {
+  // Handles first operator (2nd click)
   if (operator1 === null) {
     operator1 = operator;
     firstNum = displayContent;
   } else {
-    if (operator2 === null) {
+    // Handles second operator (4th click)
+    if (operator1 != null && operator2 === null) {
       secondNum = displayContent;
       result = operate(operator1, Number(firstNum), Number(secondNum));
       displayContent = roundAccurately(result, 15).toString();
-      firstNum = result;
+      firstNum = displayContent;
       operator2 = operator;
-    } else {
+      result = null;
+    } else if (operator1 != null && operator2 != null) {
+      // Handles third operator and beyond (6th click)
       secondNum = displayContent;
-      result = operate(operator1, Number(firstNum), Number(secondNum));
+      result = operate(operator2, Number(firstNum), Number(secondNum));
       displayContent = roundAccurately(result, 15).toString();
-      firstNum = result;
+      firstNum = displayContent;
       operator1 = operator2;
       operator2 = operator;
+      result = null;
     }
+  }
+}
+
+function inputOperator(operator) {
+  if (firstOperator != null && secondOperator === null) {
+    //4th click - handles input of second operator
+    secondOperator = operator;
+    secondOperand = displayValue;
+    result = operate(
+      Number(firstOperand),
+      Number(secondOperand),
+      firstOperator
+    );
+    displayValue = roundAccurately(result, 15).toString();
+    firstOperand = displayValue;
+    result = null;
+  } else if (firstOperator != null && secondOperator != null) {
+    //6th click - new secondOperator
+    secondOperand = displayValue;
+    result = operate(
+      Number(firstOperand),
+      Number(secondOperand),
+      secondOperator
+    );
+    secondOperator = operator;
+    displayValue = roundAccurately(result, 15).toString();
+    firstOperand = displayValue;
+    result = null;
+  } else {
+    //2nd click - handles first operator input
+    firstOperator = operator;
+    firstOperand = displayValue;
   }
 }
 
