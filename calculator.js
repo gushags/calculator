@@ -29,6 +29,10 @@ function operate(operator, a, b) {
 function updateDisplay() {
   const display = document.querySelector(".display");
   display.innerText = displayContent;
+  console.log(displayContent.length);
+  if (displayContent.length > 12) {
+    display.innerText = displayContent.substring(0, 12);
+  }
 }
 
 updateDisplay();
@@ -99,13 +103,13 @@ function operatorsInput(operator) {
     if (operator2 === null) {
       secondNum = displayContent;
       result = operate(operator1, Number(firstNum), Number(secondNum));
-      displayContent = result;
+      displayContent = roundAccurately(result, 15).toString();
       firstNum = result;
       operator2 = operator;
     } else {
       secondNum = displayContent;
       result = operate(operator1, Number(firstNum), Number(secondNum));
-      displayContent = result;
+      displayContent = roundAccurately(result, 15).toString();
       firstNum = result;
       operator1 = operator2;
       operator2 = operator;
@@ -126,7 +130,7 @@ function equalsInput() {
   if (operator1) {
     secondNum = displayContent;
     result = operate(operator1, Number(firstNum), Number(secondNum));
-    displayContent = result;
+    displayContent = roundAccurately(result, 15).toString();
     operator1 = null;
     operator2 = null;
     firstNum = displayContent;
@@ -147,6 +151,10 @@ function clearInput() {
   operator1 = null;
   operator2 = null;
   displayContent = "0";
+}
+
+function roundAccurately(num, places) {
+  return parseFloat(Math.round(num + "e" + places) + "e-" + places);
 }
 
 // // Add keypress listener to document
