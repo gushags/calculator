@@ -5,7 +5,7 @@ let operator1 = null;
 let operator2 = null;
 let result = null;
 let displayContent = "0";
-const operators = ["+", "-", "/", "x"];
+const operators = ["+", "-", "/", "x", "*"];
 const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 // Function to evaluate the equation
@@ -16,6 +16,8 @@ function operate(operator, a, b) {
     case "-":
       return a - b;
     case "x":
+      return a * b;
+    case "*":
       return a * b;
     case "/":
       if (b === 0) {
@@ -29,7 +31,6 @@ function operate(operator, a, b) {
 function updateDisplay() {
   const display = document.querySelector(".display");
   display.innerText = displayContent;
-  console.log(displayContent.length);
   if (displayContent.length > 12) {
     display.innerText = displayContent.substring(0, 12);
   }
@@ -66,6 +67,26 @@ buttons.forEach((button) => {
       updateDisplay();
     }
   });
+});
+
+// Add key press event listeners
+document.addEventListener("keypress", function onPress(selection) {
+  if (selection.key === ".") {
+    decimalInput(selection);
+    updateDisplay();
+  } else if (numbers.includes(selection.key)) {
+    operandsInput(selection.key);
+    updateDisplay();
+  } else if (operators.includes(selection.key)) {
+    operatorsInput(selection.key);
+    updateDisplay();
+  } else if (selection.key === "=") {
+    equalsInput();
+    updateDisplay();
+  } else if (selection.key === "c" || selection.key === "C") {
+    clearInput();
+    updateDisplay();
+  }
 });
 
 function decimalInput(decimal) {
